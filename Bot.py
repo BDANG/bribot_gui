@@ -105,42 +105,52 @@ class Bot(Frame):
 
 
     def _init_settings_frame(self):
+        '''
+        Handles the necessary operations required to initialize the settings tab.
+        1. Loads previous settings if they exist, otherwise intialize to default
+        2. Save any changes to allow persistence of settings.
+        3. Restore default settings.
+        '''
+        # maintain a frame for everything in the settings tab
         settingsFrame = Frame(self.notebook, padding=0, name="settings")
 
+        # load existing settings, otherwise intialize default values
         self.settings = Settings().load_from_file("settings.txt")
-        #print(self.settings.MIN_REFRESH, self.settings.MAX_REFRESH, self.settings.CHECKOUT_DELAY)
 
         #### Refresh settings
+        ### Minimum Refresh Speed
         Label(settingsFrame, text="Minimum Drop Refresh (seconds):").grid(row=1,column=1, sticky=W)
-        #minRefreshVar = StringVar() # wip: type?
         minRefreshEntry = Entry(settingsFrame, name="entry_min_refresh", width=4, takefocus=0)
         minRefreshEntry.grid(row=1, column=2, sticky=W)
 
+        # set the value according to exisiting settings, or defaults
         minRefreshEntry.delete(0, END)
         minRefreshEntry.insert(0, self.settings.MIN_REFRESH)
 
 
-
-
-
+        ### Maximum Refresh Speed
         Label(settingsFrame, text="Maximum Drop Refresh (seconds):").grid(row=2,column=1, sticky=W)
-        #maxRefreshVar = StringVar() # wip: type?
         maxRefreshEntry = Entry(settingsFrame, name="entry_max_refresh", width=4, takefocus=0)
         maxRefreshEntry.grid(row=2, column=2, sticky=W)
+
+        # set the value according to exisiting settings, or defaults
         maxRefreshEntry.delete(0, END)
         maxRefreshEntry.insert(0, self.settings.MAX_REFRESH)
 
         #### Delay settings
+        ### Checkout Delay
         Label(settingsFrame, text="Checkout Delay (seconds):").grid(row=3, column=1, sticky=W)
         checkoutDelayEntry = Entry(settingsFrame, name="entry_checkout_delay", width=4, takefocus=0)
         checkoutDelayEntry.grid(row=3, column=2, sticky=W)
 
+        # set the value according to existing settings, or defaults
         checkoutDelayEntry.delete(0, END)
         checkoutDelayEntry.insert(0, self.settings.CHECKOUT_DELAY)
 
 
-
-        #### Default/Save settings
+        #### Default/Save operations
+        ### Restoring to defaults
+        # call a function and pass the entries that will be reset, overrides existing settings file
         Button(settingsFrame,
                text="Restore Default",
                takefocus=0,
@@ -150,6 +160,8 @@ class Bot(Frame):
                                                               settingsFrame.children["entry_checkout_delay"])
                ).grid(row=4, column=1, sticky=W)
 
+        ### Saving the current settings for persistence
+        # call a function that haphazardly writes to a file
         Button(settingsFrame,
                text="Save",
                takefocus=0,
@@ -160,11 +172,7 @@ class Bot(Frame):
                                              checkoutDelayEntry.get())
                ).grid(row=4, column=3, sticky=E)
 
-
-
-
         self.notebook.add(settingsFrame, text="Settings")
-        print(settingsFrame.children)
 
 
 
