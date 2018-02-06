@@ -6,6 +6,9 @@ The purpose of the repository is to offer a simple and free/open-source Tkinter 
 #### Dependencies
 * `Python 3.6.3`
 
+## Demo
+`python Bot.py`
+
 ## Tab Breakdown
 #### Run
 Holds the necessary functions for starting/running the bot.
