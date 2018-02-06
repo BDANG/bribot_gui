@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
 from src.Settings import Settings
+from src.Cards import Cards
 
 class Bot(Frame):
     def __init__(self, master):
@@ -83,6 +84,35 @@ class Bot(Frame):
 
     def _init_cards_frame(self):
         cardFrame = Frame(self.notebook, padding=0, name="cards")
+
+
+        # Treeview (Table) of card data
+        tree = Treeview(cardFrame,
+                        columns=["fname", "lname", "email", "phone"],
+                        displaycolumns="#all")
+        tree.heading("#0", text="ID Number")
+        tree.heading("fname", text="First Name")
+        tree.heading("lname", text="Last Name")
+        tree.heading("email", text="Email")
+        tree.heading("phone", text="Phone")
+        tree.grid(row=2, columns=1, columnspan=4)
+
+        # insert dummy data for now
+        tree.insert('', 'end', text="1", values=("Brian", "Dang", "abc@abc.com", "412-111-2222"))
+        tree.insert('', 'end', text="2", values=("Brian2", "Dang", "xyz@xyz.com", "412-222-3333"))
+
+        cardHandler = Cards(tree)
+
+        # button for adding new cards
+        Button(cardFrame, name="button_add_card", text="Add", command=lambda: cardHandler.addCard()).grid(row=1, column=1, sticky=W)
+
+        # button for deleting cards
+        Button(cardFrame, name="button_delete_card", text="Delete", command=lambda: print("DELETING CARD")).grid(row=1, column=2, sticky=W)
+
+
+        # button for saving cards
+        Button(cardFrame, name="button_save_cards", text="Save", command=lambda: print("TERRIBLE")).grid(row=1, column=3, sticky=W)
+
         self.notebook.add(cardFrame, text="Cards")
 
     def _init_upgrade_frame(self):
