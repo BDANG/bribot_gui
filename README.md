@@ -9,12 +9,15 @@ The purpose of the repository is to offer a simple and free/open-source Tkinter 
 ## Tab Breakdown
 #### Run
 Holds the necessary functions for starting/running the bot.
-* `Initialize` a button that activates the chromedrivers (for `selenium`)
-* `Run` a button that actually starts the bot to search for the new drop / products
-* `Automatic Drop Detection` a toggle for detecting a new drop (new products).
+* `Initialize` button that activates the chromedrivers (for `selenium`)
+* `Run` button that actually starts the bot to search for the new drop / products
+* `Automatic Drop Detection` toggle for detecting a new drop (new products).
     * `enabled` - the bot will not search for products until a new drop is detected
     * `disabled` - the bot will immediately search for products when `Run` button is clicked
-* `Automatic Checkout` a toggle for pressing the checkout button automatically
+* `Automatic Product Search` toggle for automatically finding products with keywords
+    * `enabled` - the bot will automatically search to find a product via keywords
+    * `disabled` - the USER must MANUALLY select a product
+* `Automatic Checkout` toggle for pressing the checkout button automatically
     * `enabled` - the bot will "press" the checkout button.
     * `disabled` - the USER must MANUALLY press the checkout button.
 
