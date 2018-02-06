@@ -95,7 +95,7 @@ class Bot(Frame):
         tree.heading("lname", text="Last Name")
         tree.heading("email", text="Email")
         tree.heading("phone", text="Phone")
-        tree.grid(row=2, columns=1, columnspan=4)
+        tree.grid(row=2, columns=1, columnspan=5)
 
         # insert dummy data for now
         tree.insert('', 'end', text="1", values=("Brian", "Dang", "abc@abc.com", "412-111-2222"))
@@ -104,14 +104,16 @@ class Bot(Frame):
         cardHandler = Cards(tree)
 
         # button for adding new cards
-        Button(cardFrame, name="button_add_card", text="Add", command=lambda: cardHandler.addCard()).grid(row=1, column=1, sticky=W)
+        Button(cardFrame, name="button_add_card", text="Add", command=lambda: cardHandler.add_card()).grid(row=1, column=1, sticky=W)
 
-        # button for deleting cards
-        Button(cardFrame, name="button_delete_card", text="Delete", command=lambda: print("DELETING CARD")).grid(row=1, column=2, sticky=W)
-
+        # button for deleting cards, WIP: disable when no cards to delete
+        Button(cardFrame, name="button_delete_card", text="Delete", command=lambda: cardHandler.delete_card()).grid(row=1, column=2, sticky=W)
 
         # button for saving cards
         Button(cardFrame, name="button_save_cards", text="Save", command=lambda: print("TERRIBLE")).grid(row=1, column=3, sticky=W)
+
+        # button for loading cards
+        Button(cardFrame, name="button_load_cards", text="Load", command=lambda: print("TERRIBLE")).grid(row=1, column=4, sticky=W)
 
         self.notebook.add(cardFrame, text="Cards")
 
