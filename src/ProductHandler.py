@@ -36,7 +36,7 @@ class ProductHandler:
         # wip: specify case-sensitive?
         ####### Keyword Entry
         Label(popup, text="Keywords (comma-separated):").grid(row=1, column=1, sticky=W)
-        keywordEntry = Entry(popup, width=30)
+        keywordEntry = Entry(popup, name="entry_keywords", width=30)
         keywordEntry.grid(row=1, column=2, columnspan=2, sticky=W)
 
         #################################
@@ -69,13 +69,14 @@ class ProductHandler:
         #################################
         ####### color keywords
         Label(popup, text="Color(s) (comma-separated):").grid(row=4, column=1, sticky=W)
-        colorEntry = Entry(popup, width=30)
+        colorEntry = Entry(popup, name="entry_colors", width=30)
         colorEntry.grid(row=4, column=2, columnspan=2, sticky=W)
 
 
         # Submit / add product to the tree via private method
         Button(popup,
-               text="Add Card",
+               text="Add Product",
+               name="button_confirm",
                command=lambda: self._add_product_to_tree(
                                                       keywordEntry.get(),
                                                       typeBox.get(),
@@ -87,11 +88,46 @@ class ProductHandler:
 
         # or cancel the new product
         Button(popup, text="Cancel", command=popup.destroy).grid(row=5, column=2)
+        return popup
 
     def edit_product(self):
         itemToEdit = self.tree.focus()
         if itemToEdit != "":
-            _edit_product(itemToEdit)
+            item = self.tree.item(itemToEdit)
+            product = Product(tkTreeValueList=item["values"])
+
+            # re-use the popup created by add_product()
+            popup = self.add_product()
+
+            # rename the popup
+            popup.title("Edit Product")
+
+            # populate the popup widgets with existing data
+            keywordEntry = popup.children["entry_keywords"]
+            keywordEntry.delete(0, END)
+            keywordEntry.insert(0, item["values"][0])
+
+            typeBox = popup.children["combobox_type"]
+            typeBox.set(product.type)
+
+            sizeBox = popup.children["combobox_size"]
+            sizeBox.set(product.size)
+
+            colorEntry = popup.children["entry_colors"]
+            colorEntry.delete(0, END)
+            colorEntry.insert(0, item["values"][3])
+
+            # modify the add button to perform edit
+            button = popup.children["button_confirm"]
+            button.configure(text="Edit Product")
+            button.configure(command=lambda: self._edit_product(
+                                                                itemToEdit,
+                                                                keywordEntry.get(),
+                                                                typeBox.get(),
+                                                                self._get_size(popup),
+                                                                colorEntry.get(),
+                                                                popup
+                                                                ))
 
 
 
@@ -115,8 +151,6 @@ class ProductHandler:
         # confirm deletion (call private method) or cancel
         Button(popup, text="Delete", command=lambda: self._delete_product(itemID, popup)).grid(row=3, column=1)
         Button(popup, text="Cancel", command=popup.destroy).grid(row=3, column=2)
-
-
 
     def delete_product(self):
         '''
@@ -178,15 +212,21 @@ class ProductHandler:
                     values=Product(dictrow=row).to_tree_tuple()
                 )
 
+    def _edit_product(self, itemID, keywordCommaStr, shoptype, size, colorCommaStr, popup=None):
+        '''
+        Private method for handling editing a product.
+        Recreate an "add-product" popup and populate the values
+        with the selected item (via itemID)
+        '''
+        self.tree.set(itemID, column="keywords", value=keywordCommaStr)
+        self.tree.set(itemID, column="type", value=shoptype)
+        self.tree.set(itemID, column="size", value=size)
+        self.tree.set(itemID, column="color", value=colorCommaStr)
+        if popup:
+            popup.destroy()
 
 
 
-    def _get_next_card_num(self):
-        # WIP: DANGEROUS: what if you delete a card? and get a duplicate ID??
-        return len(self.tree.get_children())+1
-
-    def _edit_product(self, itemID):
-        None
 
     def _delete_product(self, itemID, popup=None):
         '''
