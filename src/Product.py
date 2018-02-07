@@ -11,27 +11,30 @@ class Product:
         2. via a dict from csv reading
         '''
         if tkTreeValueList:
+            self.cardID = tkTreeValueList[0]
+
             # a string with tildas in between keywords, (tilda-delimited)
             # primarily for file output
-            self.keywordTildas = self.tilda_keywords(tkTreeValueList[0])
+            self.keywordTildas = self.tilda_keywords(tkTreeValueList[1])
 
             # a non-flexible string that represents shop type
             # i.e. "jackets", "top_sweaters", "accessories"
-            self.type = tkTreeValueList[1]
+            self.type = tkTreeValueList[2]
 
             # a non-flexible string that represents product size
-            self.size = tkTreeValueList[2]
+            self.size = tkTreeValueList[3]
 
             # a string with tildas between colors (tilda-delimited)
             # primarily for file output
-            self.colorTildas = self.tilda_keywords(tkTreeValueList[3])
+            self.colorTildas = self.tilda_keywords(tkTreeValueList[4])
 
             # a list of strings (keywords)
-            self.keywordList = self.parse_keywords_to_list(tkTreeValueList[0])
+            self.keywordList = self.parse_keywords_to_list(tkTreeValueList[1])
 
             # a list of strings (colors)
-            self.colorList = self.parse_keywords_to_list(tkTreeValueList[3])
+            self.colorList = self.parse_keywords_to_list(tkTreeValueList[4])
         if dictrow: # see above for variable description
+            self.cardID = dictrow["cardID"]
             self.keywordTildas = dictrow["keywords"]
             self.type = dictrow["shoptype"]
             self.size = dictrow["size"]
@@ -63,6 +66,12 @@ class Product:
             newList.append(keyword.strip())
         return newList
 
+    def get_comma_str_keywords(self, kwList):
+        returnStr = ""
+        for kw in kwList:
+            returnStr += kw+", "
+        return returnStr[:-2]
+
     def to_tree_tuple(self):
         '''
         Converts a Product instance into a tuple of strings
@@ -78,4 +87,4 @@ class Product:
             colorCommaStr += color+", "
         colorCommaStr = colorCommaStr[:-2]
 
-        return (keywordCommaStr, self.type, self.size, colorCommaStr)
+        return (self.cardID, keywordCommaStr, self.type, self.size, colorCommaStr)

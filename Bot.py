@@ -68,9 +68,10 @@ class Bot(Frame):
 
         tree = Treeview(productFrame,
                         name="tree_products",
-                        columns=["keywords", "type", "size", "color"],
-                        displaycolumns=["keywords", "type", "size", "color"],
+                        columns=["cardID", "keywords", "type", "size", "color"],
+                        displaycolumns=["cardID", "keywords", "type", "size", "color"],
                         show="headings")
+        tree.heading("cardID", text="Using Card")
         tree.heading("keywords", text="Keywords")
         tree.heading("type", text="Type")
         tree.heading("size", text="Size")
@@ -80,8 +81,8 @@ class Bot(Frame):
 
 
         # insert dummy data for now
-        tree.insert('', 'end', values=("Box Logo", "sweatshirts", "Medium", "Black, Red"))
-        tree.insert('', 'end', values=("Hanes, Boxers", "accessories", "Small", "White"))
+        tree.insert('', 'end', values=("1", "Box Logo", "sweatshirts", "Medium", "Black, Red"))
+        tree.insert('', 'end', values=("1", "Hanes, Boxers", "accessories", "Small", "White"))
 
         # special class for handling the product GUI functions (adding, editing, deleting, saving, loading)
         productHandler = ProductHandler(tree)

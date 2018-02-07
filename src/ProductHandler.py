@@ -11,14 +11,14 @@ class ProductHandler:
         self.tree = tree
         self.PROMPT_DELETE = True
 
-    def _add_product_to_tree(self, keywords, shoptype, size, colorKeywords, popup=None):
+    def _add_product_to_tree(self, cardID, keywords, shoptype, size, colorKeywords, popup=None):
         '''
         Private method for adding products to the tree
         keywords and colorKeywords are comma-separated strings
         shoptype, size are "determined" strings (not very flexible)
         '''
         # add to the tree, and close the popup
-        self.tree.insert("", "end", values=(keywords, shoptype, size, colorKeywords))
+        self.tree.insert("", "end", values=(cardID, keywords, shoptype, size, colorKeywords))
         if popup:
             popup.destroy()
 
@@ -37,8 +37,8 @@ class ProductHandler:
         Label(popup, text="Card ID:").grid(row=6, column=1, sticky=W)
         cardBox = Combobox(popup,
                            width=12,
+                           name="combobox_cardID",
                            state="readonly",
-                           name="entry_cardID",
                            values=self._get_list_card_nums())
         cardBox.grid(row=6, column=2, columnspan=2, sticky=W)
 
@@ -90,6 +90,7 @@ class ProductHandler:
                text="Add Product",
                name="button_confirm",
                command=lambda: self._add_product_to_tree(
+                                                      cardBox.get(),
                                                       keywordEntry.get(),
                                                       typeBox.get(),
                                                       self._get_size(popup),
@@ -115,9 +116,12 @@ class ProductHandler:
             popup.title("Edit Product")
 
             # populate the popup widgets with existing data
+            cardBox = popup.children["combobox_cardID"]
+            cardBox.set(product.cardID)
+
             keywordEntry = popup.children["entry_keywords"]
             keywordEntry.delete(0, END)
-            keywordEntry.insert(0, item["values"][0])
+            keywordEntry.insert(0, product.get_comma_str_keywords(product.keywordList))
 
             typeBox = popup.children["combobox_type"]
             typeBox.set(product.type)
@@ -127,13 +131,14 @@ class ProductHandler:
 
             colorEntry = popup.children["entry_colors"]
             colorEntry.delete(0, END)
-            colorEntry.insert(0, item["values"][3])
+            colorEntry.insert(0, product.get_comma_str_keywords(product.colorList))
 
             # modify the add button to perform edit
             button = popup.children["button_confirm"]
             button.configure(text="Edit Product")
             button.configure(command=lambda: self._edit_product(
                                                                 itemToEdit,
+                                                                cardBox.get(),
                                                                 keywordEntry.get(),
                                                                 typeBox.get(),
                                                                 self._get_size(popup),
@@ -156,7 +161,7 @@ class ProductHandler:
         values = self.tree.item(itemID)["values"]
         dataStr = ""
         for value in values:
-            dataStr += value+"\n"
+            dataStr += str(value)+"\n"
         Label(popup, text=dataStr).grid(row=2, column=1, columnspan=2, sticky=W)
 
 
@@ -190,7 +195,7 @@ class ProductHandler:
             return
 
         with open(filepath, "w") as f:
-            fields = ["keywords", "shoptype", "size", "colors"]
+            fields = ["cardID", "keywords", "shoptype", "size", "colors"]
             writer = csv.DictWriter(f, fieldnames=fields)
             writer.writeheader()
 
@@ -201,6 +206,7 @@ class ProductHandler:
                 # handle the tree values via an object
                 product = Product(tkTreeValueList=item["values"])
                 writer.writerow({
+                                "cardID": product.cardID,
                                 "keywords": product.keywordTildas,
                                 "shoptype": product.type,
                                 "size": product.size,
@@ -224,12 +230,13 @@ class ProductHandler:
                     values=Product(dictrow=row).to_tree_tuple()
                 )
 
-    def _edit_product(self, itemID, keywordCommaStr, shoptype, size, colorCommaStr, popup=None):
+    def _edit_product(self, itemID, cardID, keywordCommaStr, shoptype, size, colorCommaStr, popup=None):
         '''
         Private method for handling editing a product.
         Recreate an "add-product" popup and populate the values
         with the selected item (via itemID)
         '''
+        self.tree.set(itemID, column="cardID", value=cardID)
         self.tree.set(itemID, column="keywords", value=keywordCommaStr)
         self.tree.set(itemID, column="type", value=shoptype)
         self.tree.set(itemID, column="size", value=size)
