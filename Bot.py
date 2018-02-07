@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter.ttk import *
 from src.Settings import Settings
 from src.Cards import Cards
+from src.ProductHandler import ProductHandler
 
 class Bot(Frame):
     def __init__(self, master):
@@ -65,19 +66,39 @@ class Bot(Frame):
     def _init_products_frame(self):
         productFrame = Frame(self.notebook, padding=0, name="products")
 
-        tree = Treeview(productFrame)#.grid(row=1, column=1)
+        tree = Treeview(productFrame,
+                        columns=["keywords", "type", "size", "color"],
+                        displaycolumns=["keywords", "type", "size", "color"],
+                        show="headings")
+        tree.heading("keywords", text="Keywords")
+        tree.heading("type", text="Type")
+        tree.heading("size", text="Size")
+        tree.heading("color", text="Color Keywords")
 
-        tree.insert('', 'end', 'widgets', text='Widget Tour')
+        tree.grid(row=2, columns=1, columnspan=6)
 
-        # Same thing, but inserted as first child:
-        tree.insert('', 0, 'gallery', text='Applications')
 
-        # Treeview chooses the id:
-        id = tree.insert('', 'end', text='Tutorial')
+        # insert dummy data for now
+        tree.insert('', 'end', values=("Box Logo", "sweatshirts", "Medium", "Black, Red"))
+        tree.insert('', 'end', values=("Hanes, Boxers", "accessories", "Small", "White"))
 
-        # Inserted underneath an existing node:
-        tree.insert('widgets', 'end', text='Canvas')
-        tree.insert(id, 'end', text='Tree')
+        # special class for handling the product GUI functions (adding, editing, deleting, saving, loading)
+        productHandler = ProductHandler(tree)
+
+        # button for adding new products
+        Button(productFrame, name="button_add_product", text="Add", command=lambda: productHandler.add_product()).grid(row=1, column=1, sticky=W)
+
+        # button for editing products
+        Button(productFrame, name="button_edit_product", text="Edit", command=lambda: productHandler.edit_product()).grid(row=1, column=2, sticky=W)
+
+        # button for deleting products, WIP: disable when no cards to delete
+        Button(productFrame, name="button_delete_product", text="Delete", command=lambda: productHandler.delete_product()).grid(row=1, column=3, sticky=W)
+
+        # button for saving products
+        Button(productFrame, name="button_save_product", text="Save", command=lambda: productHandler.save_products()).grid(row=1, column=4, sticky=W)
+
+        # button for loading products
+        Button(productFrame, name="button_load_product", text="Load", command=lambda: productHandler.load_products()).grid(row=1, column=5, sticky=W)
 
 
         self.notebook.add(productFrame, text="Products")
