@@ -67,6 +67,7 @@ class Bot(Frame):
         productFrame = Frame(self.notebook, padding=0, name="products")
 
         tree = Treeview(productFrame,
+                        name="tree_products",
                         columns=["keywords", "type", "size", "color"],
                         displaycolumns=["keywords", "type", "size", "color"],
                         show="headings")
@@ -109,6 +110,7 @@ class Bot(Frame):
 
         # Treeview (Table) of card data
         tree = Treeview(cardFrame,
+                        name="tree_cards",
                         columns=["fname", "lname", "email", "phone"],
                         displaycolumns="#all")
         tree.heading("#0", text="ID Number")

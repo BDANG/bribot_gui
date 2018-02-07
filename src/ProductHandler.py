@@ -33,6 +33,18 @@ class ProductHandler:
         popup.title("Add a Product")
 
         #################################
+        ####### Card Number
+        Label(popup, text="Card ID:").grid(row=6, column=1, sticky=W)
+        cardBox = Combobox(popup,
+                           width=12,
+                           state="readonly",
+                           name="entry_cardID",
+                           values=self._get_list_card_nums())
+        cardBox.grid(row=6, column=2, columnspan=2, sticky=W)
+
+
+
+        #################################
         # wip: specify case-sensitive?
         ####### Keyword Entry
         Label(popup, text="Keywords (comma-separated):").grid(row=1, column=1, sticky=W)
@@ -278,3 +290,18 @@ class ProductHandler:
             if "entry_manual_size" in popup.children.keys():
                 popup.children["entry_manual_size"].destroy()
             sizeBox.grid(row=3, column=2, columnspan=2, sticky=W)
+
+    def _get_list_card_nums(self):
+        # traverse up the hierarchy to product frame and then the notebook
+        productFrame = self.tree.nametowidget(self.tree.winfo_parent())
+        notebook = productFrame.nametowidget(productFrame.winfo_parent())
+
+        # traverse down the hierarchy to card frame and then the tree
+        cardTree = notebook.children["cards"].children["tree_cards"]
+
+        # iterate the cards, and retrieve their text (tied to id)
+        returnList = []
+        for cardItem in cardTree.get_children():
+            returnList.append(cardTree.item(cardItem)["text"])
+
+        return returnList
