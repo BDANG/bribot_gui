@@ -9,6 +9,17 @@ The purpose of the repository is to offer a simple and free/open-source Tkinter 
 ## Demo
 `python Bot.py`
 
+## Roadmap
+* continue building out base functionality
+    * editing products/cards
+    * linking products/cards, with error handling
+    * encrypted cards file
+* prepare backend points-of-entry in the GUI
+* incorporate backend functionality when season is live
+* robust error handling
+* quality of life improvements: disabling/enabling certain actions
+* socket/upgrading/feature toggling
+
 ## Tab Breakdown
 #### Run
 Holds the necessary functions for starting/running the bot.
