@@ -32,29 +32,45 @@ class ProductHandler:
         popup = Toplevel()
         popup.title("Add a Product")
 
+        #################################
         # wip: specify case-sensitive?
-        # Keyword Entry
+        ####### Keyword Entry
         Label(popup, text="Keywords (comma-separated):").grid(row=1, column=1, sticky=W)
         keywordEntry = Entry(popup, width=30)
-        keywordEntry.grid(row=1, column=2, sticky=W)
+        keywordEntry.grid(row=1, column=2, columnspan=2, sticky=W)
 
-        # Shop type dropdown
+        #################################
+        ####### size dropdown
+        Label(popup, text="Size:").grid(row=3, column=1, sticky=W)
+        sizeBox = Combobox(popup,
+                           width=12,
+                           state="readonly",
+                           name="combobox_size")
+        sizeBox.grid(row=3, column=2, columnspan=2, sticky=W)
+        sizeBox.bind("<<ComboboxSelected>>", lambda x: self._manual_size_entry(popup, sizeBox))
+
+        #################################
+        ####### Shop type dropdown
         Label(popup, text="Type:").grid(row=2, column=1, sticky=W)
         typeBox = Combobox(popup,
-                           width=10,
+                           width=12,
                            state="readonly",
+                           name="combobox_type",
                            values=["jackets", "tops-sweaters", "sweatshirts", "t-shirts", "accessories", "shoes", "hats", "bags", "skate"])
-        typeBox.grid(row=2, column=2, sticky=W)
+        typeBox.grid(row=2, column=2, columnspan=2, sticky=W)
+
+        # intialize the type box to jackets, and set sizing options accordingly
         typeBox.set("jackets")
+        self._update_size_dropdown_values(popup, sizeBox, typeBox.get())
 
-        # size dropdown
-        Label(popup, text="Size:").grid(row=3, column=1, sticky=W)
-        #self.populate_size_dropdown(popup, typeBox.get())
+        # bind an action that forces size selection if type is changed
+        typeBox.bind("<<ComboboxSelected>>", lambda x: self._update_size_dropdown_values(popup, sizeBox, typeBox.get()))
 
-        # color keywords
+        #################################
+        ####### color keywords
         Label(popup, text="Color(s) (comma-separated):").grid(row=4, column=1, sticky=W)
         colorEntry = Entry(popup, width=30)
-        colorEntry.grid(row=4, column=2, sticky=W)
+        colorEntry.grid(row=4, column=2, columnspan=2, sticky=W)
 
 
         # Submit / add product to the tree via private method
@@ -63,7 +79,7 @@ class ProductHandler:
                command=lambda: self._add_product_to_tree(
                                                       keywordEntry.get(),
                                                       typeBox.get(),
-                                                      "SIZE_FUNC",
+                                                      self._get_size(popup),
                                                       colorEntry.get(),
                                                       popup
                                                       )
@@ -180,3 +196,45 @@ class ProductHandler:
         self.tree.delete(itemID)
         if popup:
             popup.destroy()
+
+    def _get_size(self, popup):
+        '''
+        Private method for determining the size (either from dropdown or manual entry)
+        '''
+        if "entry_manual_size" in popup.children.keys():
+            return popup.children["entry_manual_size"].get()
+        # wip: check for other, OR THROW ERROR
+        elif popup.children["combobox_size"].get() == "SELECT":
+            return "FIX THIS"
+        else:
+            return popup.children["combobox_size"].get()
+
+
+    def _update_size_dropdown_values(self, popup, sizeBox, shoptype):
+        '''
+        Private method for populating the dropdown options for the sizing
+        options for sizing is dependent on the shoptype!
+        '''
+        sizeBox.set("SELECT")
+        self._manual_size_entry(popup, sizeBox)
+
+        #["jackets", "tops-sweaters", "sweatshirts", "t-shirts", "accessories", "shoes", "hats", "bags", "skate"]
+        values = ["Manually Enter", "Any Size", "Small", "Medium", "Large", "Xlarge"]
+        if shoptype == "accessories" or shoptype == "bags" or shoptype == "hats":
+            values.append("S/M")
+            values.append("X/XL")
+        if shoptype == "skate" or shoptype == "shoes":
+            values.append("--COMING SOON--")
+        sizeBox.configure(values=values)
+
+    def _manual_size_entry(self, popup, sizeBox):
+        '''
+        Private method for enabling/disabling manual size entry
+        '''
+        if sizeBox.get() == "Manually Enter":
+            sizeBox.grid(row=3, column=2, columnspan=1, sticky=W)
+            Entry(popup, width=10, name="entry_manual_size").grid(row=3, column=3, sticky=W)
+        else:
+            if "entry_manual_size" in popup.children.keys():
+                popup.children["entry_manual_size"].destroy()
+            sizeBox.grid(row=3, column=2, columnspan=2, sticky=W)
