@@ -17,6 +17,7 @@ The purpose of the repository is to offer a simple and free/open-source Tkinter 
 * prepare backend points-of-entry in the GUI
 * incorporate backend functionality when season is live
 * robust error handling
+* make the UI look good hah
 * quality of life improvements: disabling/enabling certain actions
 * socket/upgrading/feature toggling
 
