@@ -74,8 +74,10 @@ class Cards:
 
 
     def _get_next_card_num(self):
-        # WIP: DANGEROUS: what if you delete a card? and get a duplicate ID??
-        return len(self.tree.get_children())+1
+        if len(self.tree.get_children()) == 0:
+            return 1
+        else:
+            return int(self.tree.get_children()[-1].lstrip("I"))+1
 
     def _delete_card(self, itemID, popup=None):
         self.tree.delete(itemID)
