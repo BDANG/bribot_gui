@@ -81,7 +81,13 @@ class CardHandler:
                               values=["USA", "Canada"])
         countryBox.grid(row=10, column=2, sticky=W)
 
-        #Separator(popup, orient=HORIZONTAL).grid(row=12, column=1, sticky="ew")
+        Separator(popup, orient=VERTICAL).grid(row=1, column=3, rowspan=10, sticky="ns")
+
+        Label(popup, text="Card Num: ").grid(row=1, column=4, sticky=W)
+        cardnumEntry = Entry(popup, name="entry_cardnum", width=10)
+        cardnumEntry.grid(row=1, column=5, sticky=W)
+
+
 
 
 
