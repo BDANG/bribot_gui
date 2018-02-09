@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import *
 from src.Settings import Settings
-from src.Cards import Cards
+from src.CardHandler import CardHandler
 from src.ProductHandler import ProductHandler
 
 class Bot(Frame):
@@ -125,7 +125,7 @@ class Bot(Frame):
         tree.insert('', 'end', text="1", values=("Brian", "Dang", "abc@abc.com", "412-111-2222"))
         tree.insert('', 'end', text="2", values=("Brian2", "Dang", "xyz@xyz.com", "412-222-3333"))
 
-        cardHandler = Cards(tree)
+        cardHandler = CardHandler(tree)
 
         # button for adding new cards
         Button(cardFrame, name="button_add_card", text="Add", command=lambda: cardHandler.add_card()).grid(row=1, column=1, sticky=W)
