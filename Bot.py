@@ -108,18 +108,23 @@ class Bot(Frame):
     def _init_cards_frame(self):
         cardFrame = Frame(self.notebook, padding=0, name="cards")
 
+        treeFrame = Frame(cardFrame)
 
         # Treeview (Table) of card data
         tree = Treeview(cardFrame,
                         name="tree_cards",
-                        columns=["fname", "lname", "email", "phone"],
+                        columns=["name", "email", "phone", "address1", "apt", "address2", "zip", "city", "state", "country"],
                         displaycolumns="#all")
         tree.heading("#0", text="ID Number")
-        tree.heading("fname", text="First Name")
-        tree.heading("lname", text="Last Name")
+        tree.heading("name", text="Name")
         tree.heading("email", text="Email")
         tree.heading("phone", text="Phone")
-        tree.grid(row=2, columns=1, columnspan=5)
+        tree.grid(row=2, columns=1, columnspan=6)
+
+        #vsb = Scrollbar(cardFrame, orient="horizontal", command=tree.xview)
+        #vsb.pack(side='bottom', fill='y')
+
+        #tree.configure(xscrollcommand=vsb.set)
 
         # insert dummy data for now
         tree.insert('', 'end', text="1", values=("Brian", "Dang", "abc@abc.com", "412-111-2222"))
@@ -130,14 +135,17 @@ class Bot(Frame):
         # button for adding new cards
         Button(cardFrame, name="button_add_card", text="Add", command=lambda: cardHandler.add_card()).grid(row=1, column=1, sticky=W)
 
+        # button for editing cards
+        Button(cardFrame, name="button_edit_product", text="Edit", command=lambda: cardHandler.edit_card()).grid(row=1, column=2, sticky=W)
+
         # button for deleting cards, WIP: disable when no cards to delete
-        Button(cardFrame, name="button_delete_card", text="Delete", command=lambda: cardHandler.delete_card()).grid(row=1, column=2, sticky=W)
+        Button(cardFrame, name="button_delete_card", text="Delete", command=lambda: cardHandler.delete_card()).grid(row=1, column=3, sticky=W)
 
         # button for saving cards
-        Button(cardFrame, name="button_save_cards", text="Save", command=lambda: print("TERRIBLE")).grid(row=1, column=3, sticky=W)
+        Button(cardFrame, name="button_save_cards", text="Save", command=lambda: print("TERRIBLE")).grid(row=1, column=4, sticky=W)
 
         # button for loading cards
-        Button(cardFrame, name="button_load_cards", text="Load", command=lambda: print("TERRIBLE")).grid(row=1, column=4, sticky=W)
+        Button(cardFrame, name="button_load_cards", text="Load", command=lambda: print("TERRIBLE")).grid(row=1, column=5, sticky=W)
 
         self.notebook.add(cardFrame, text="Cards")
 
