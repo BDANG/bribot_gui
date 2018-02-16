@@ -6,13 +6,16 @@ from tkinter.ttk import *
 class CardHandler:
     MIN_YEAR = 2018
     MAX_YEAR = 2026
-    def __init__(self, tree):
+    def __init__(self, tree, cardTree):
         self.tree = tree
+        self.cardTree = cardTree
         self.PROMPT_DELETE = True
 
-    def _add_card_to_tree(self, fname, lname, popup=None):
+    def _add_card_to_tree(self, name, email, phone, address1, addressApt, address2, zipcode, city, state, country, cardnum, cardmonth, cardyear, cvv, popup=None):
 
-        self.tree.insert("", "end", text=self._get_next_card_num(), values=(fname, lname, "a", "ph"))
+        cardID = self._get_next_card_num()
+        self.tree.insert("", "end", text=cardID, values=(name, email, phone, address1, addressApt, address2, zipcode, city, state, country))
+        self.cardTree.insert("", "end", text=cardID, values=(cardnum, cardmonth, cardyear, cvv))
 
         if popup:
             popup.destroy()
@@ -120,27 +123,74 @@ class CardHandler:
         cvvEntry = Entry(inputframe, name="entry_cvv", width=4)
         cvvEntry.grid(row=3, column=5, sticky=W)
 
-
-
-
-
-
-
-
-
-
-
         # Submit
         Button(popup,
                text="Add Card",
                name="button_confirm",
                command=lambda: self._add_card_to_tree(
                                                       nameEntry.get(),
-                                                      nameEntry.get(),
+                                                      emailEntry.get(),
+                                                      phoneEntry.get(),
+                                                      address1Entry.get(),
+                                                      addressAptEntry.get(),
+                                                      address2Entry.get(),
+                                                      zipEntry.get(),
+                                                      cityEntry.get(),
+                                                      stateEntry.get(),
+                                                      countryBox.get(),
+                                                      cardnumEntry.get(),
+                                                      cardmonthBox.get(),
+                                                      cardyearBox.get(),
+                                                      cvvEntry.get(),
                                                       popup
                                                       )
                ).grid(row=2, column=1)
         Button(popup, text="Cancel", command=popup.destroy).grid(row=2, column=2)
+        return popup
+
+    def edit_card(self):
+        itemToEdit = self.tree.focus()
+        if itemToEdit != "":
+            item = self.tree.item(itemToEdit)
+            #product = Product(tkTreeValueList=item["values"])
+
+            # re-use the popup created by add_product()
+            popup = self.add_card()
+
+            # rename the popup
+            popup.title("Edit Product")
+
+            # populate the popup widgets with existing data
+            '''
+            cardBox = popup.children["combobox_cardID"]
+            cardBox.set(product.cardID)
+
+            keywordEntry = popup.children["entry_keywords"]
+            keywordEntry.delete(0, END)
+            keywordEntry.insert(0, product.get_comma_str_keywords(product.keywordList))
+
+            typeBox = popup.children["combobox_type"]
+            typeBox.set(product.type)
+
+            sizeBox = popup.children["combobox_size"]
+            sizeBox.set(product.size)
+
+            colorEntry = popup.children["entry_colors"]
+            colorEntry.delete(0, END)
+            colorEntry.insert(0, product.get_comma_str_keywords(product.colorList))
+
+            # modify the add button to perform edit
+            button = popup.children["button_confirm"]
+            button.configure(text="Edit Product")
+            button.configure(command=lambda: self._edit_product(
+                                                                itemToEdit,
+                                                                cardBox.get(),
+                                                                keywordEntry.get(),
+                                                                typeBox.get(),
+                                                                self._get_size(popup),
+                                                                colorEntry.get(),
+                                                                popup
+                                                                ))'''
 
     def _confirm_delete(self, itemID):
         # init popup
@@ -152,7 +202,14 @@ class CardHandler:
         values = self.tree.item(itemID)["values"]
         dataStr = ""
         for value in values:
-            dataStr += value+"\n"
+            if value != "":
+                dataStr += str(value)+"\n"
+
+        dataStr+="\n"
+        values = self.cardTree.item(itemID)["values"]
+        for value in values:
+            if value != "":
+                dataStr += str(value)+"\n"
         Label(popup, text=dataStr).grid(row=2, column=1, columnspan=2, sticky=W)
 
 
@@ -179,7 +236,9 @@ class CardHandler:
         else:
             return int(self.tree.get_children()[-1].lstrip("I"))+1
 
+
     def _delete_card(self, itemID, popup=None):
         self.tree.delete(itemID)
+        self.cardTree.delete(itemID)
         if popup:
             popup.destroy()

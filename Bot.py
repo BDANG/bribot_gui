@@ -108,44 +108,87 @@ class Bot(Frame):
     def _init_cards_frame(self):
         cardFrame = Frame(self.notebook, padding=0, name="cards")
 
+        # wip pack the tree Frame
+        # encapsulate buttons in frame, pack that shit!
         treeFrame = Frame(cardFrame)
+        #treeFrame.grid(row=2, column=1, columnspan=4)
+        treeFrame.pack(side="bottom", fill="x")
+
 
         # Treeview (Table) of card data
-        tree = Treeview(cardFrame,
-                        name="tree_cards",
+        tree = Treeview(treeFrame,
+                        name="tree_address",
                         columns=["name", "email", "phone", "address1", "apt", "address2", "zip", "city", "state", "country"],
                         displaycolumns="#all")
         tree.heading("#0", text="ID Number")
         tree.heading("name", text="Name")
         tree.heading("email", text="Email")
         tree.heading("phone", text="Phone")
-        tree.grid(row=2, columns=1, columnspan=6)
+        tree.heading("address1", text="Address")
+        tree.heading("apt", text="Apt / Unit")
+        tree.heading("address2", text="Address Line 2")
+        tree.heading("zip", text="Zipcode")
+        tree.heading("city", text="City")
+        tree.heading("state", text="State")
+        tree.heading("country", text="Country")
 
-        #vsb = Scrollbar(cardFrame, orient="horizontal", command=tree.xview)
-        #vsb.pack(side='bottom', fill='y')
 
-        #tree.configure(xscrollcommand=vsb.set)
+        tree.column("#0", width=80)
+        tree.column("name", width=80)
+        tree.column("email", width=80)
+        tree.column("phone", width=80)
+        tree.column("address1", width=80)
+        tree.column("apt", width=80)
+        tree.column("address2", width=80)
+        tree.column("zip", width=50)
+        tree.column("city", width=80)
+        tree.column("state", width=80)
+        tree.column("country", width=80)
+        #tree.grid(row=2, column=1, columnspan=6)
+        tree.pack(side=TOP, fill="x")
+
+        vsb = Scrollbar(treeFrame, orient=HORIZONTAL, command=tree.xview())
+        vsb.pack(side=BOTTOM, fill='x')
+        #vsb.grid(row=3, column=1, columnspan=5)
+
+        tree.configure(xscrollcommand=vsb.set)
+
+
+        cardTree = Treeview(treeFrame,
+                            name="tree_cards",
+                            columns=["number", "month", "year", "cvv"],
+                            displaycolumns="#all")
+        cardTree.pack(side=BOTTOM)
+        cardTree.heading("#0", text="ID Number")
+        cardTree.heading("number", text="Number")
+        cardTree.heading("month", text="Month")
+        cardTree.heading("year", text="Year")
+        cardTree.heading("cvv", text="CVV")
+
+        cardHandler = CardHandler(tree, cardTree)
 
         # insert dummy data for now
-        tree.insert('', 'end', text="1", values=("Brian", "Dang", "abc@abc.com", "412-111-2222"))
-        tree.insert('', 'end', text="2", values=("Brian2", "Dang", "xyz@xyz.com", "412-222-3333"))
+        #name, email, phone, address1, addressApt, address2, zipcode, city, state, country, cardnum, cardmonth, cardyear, cvv
+        cardHandler._add_card_to_tree("Brian Dang", "heybdang@gmail.com", "412-623-9816", "561 Pat Haven Dr", "", "", "15243", "Pittsburgh", "PA", "USA", "1111 2222 3333 4444", "01", "2020", "111")
+        cardHandler._add_card_to_tree("Brian Dang2", "sfww@gmail.com", "412-211-1231", "444 Haven Dr", "2", "upstairs", "15243", "Oakland", "PA", "USA", "1111222233334444", "12", "2020", "111")
 
-        cardHandler = CardHandler(tree)
+        buttonFrame = Frame(cardFrame)
+        buttonFrame.pack(side="top", fill="x")
 
         # button for adding new cards
-        Button(cardFrame, name="button_add_card", text="Add", command=lambda: cardHandler.add_card()).grid(row=1, column=1, sticky=W)
+        Button(buttonFrame, name="button_add_card", text="Add", command=lambda: cardHandler.add_card()).grid(row=1, column=1, sticky=W)
 
         # button for editing cards
-        Button(cardFrame, name="button_edit_product", text="Edit", command=lambda: cardHandler.edit_card()).grid(row=1, column=2, sticky=W)
+        Button(buttonFrame, name="button_edit_product", text="Edit", command=lambda: cardHandler.edit_card()).grid(row=1, column=2, sticky=W)
 
         # button for deleting cards, WIP: disable when no cards to delete
-        Button(cardFrame, name="button_delete_card", text="Delete", command=lambda: cardHandler.delete_card()).grid(row=1, column=3, sticky=W)
+        Button(buttonFrame, name="button_delete_card", text="Delete", command=lambda: cardHandler.delete_card()).grid(row=1, column=3, sticky=W)
 
         # button for saving cards
-        Button(cardFrame, name="button_save_cards", text="Save", command=lambda: print("TERRIBLE")).grid(row=1, column=4, sticky=W)
+        Button(buttonFrame, name="button_save_cards", text="Save", command=lambda: print("TERRIBLE")).grid(row=1, column=4, sticky=W)
 
         # button for loading cards
-        Button(cardFrame, name="button_load_cards", text="Load", command=lambda: print("TERRIBLE")).grid(row=1, column=5, sticky=W)
+        Button(buttonFrame, name="button_load_cards", text="Load", command=lambda: print("TERRIBLE")).grid(row=1, column=5, sticky=W)
 
         self.notebook.add(cardFrame, text="Cards")
 
