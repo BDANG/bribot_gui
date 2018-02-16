@@ -228,6 +228,22 @@ class CardHandler:
             else:
                 self.tree.delete(itemToDelete)
 
+    def copy_card(self):
+        itemID = self.tree.focus()
+        itemAddress = self.tree.item(itemID)["values"]
+        itemCard = self.cardTree.item(itemID)["values"]
+        self._add_card_to_tree(itemAddress[0],
+                               itemAddress[1],
+                               itemAddress[2],
+                               itemAddress[3],
+                               itemAddress[4],
+                               itemAddress[5],
+                               itemAddress[6],
+                               itemAddress[7],
+                               itemAddress[8],
+                               itemAddress[9],
+                               itemCard[0], itemCard[1], itemCard[2], itemCard[3])
+
 
 
     def _get_next_card_num(self):

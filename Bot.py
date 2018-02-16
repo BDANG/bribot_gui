@@ -184,11 +184,14 @@ class Bot(Frame):
         # button for deleting cards, WIP: disable when no cards to delete
         Button(buttonFrame, name="button_delete_card", text="Delete", command=lambda: cardHandler.delete_card()).grid(row=1, column=3, sticky=W)
 
+        # button for copying cards
+        Button(buttonFrame, name="button_copy_card", text="Copy", command=lambda: cardHandler.copy_card()).grid(row=1, column=4, sticky=W)
+
         # button for saving cards
-        Button(buttonFrame, name="button_save_cards", text="Save", command=lambda: print("TERRIBLE")).grid(row=1, column=4, sticky=W)
+        Button(buttonFrame, name="button_save_cards", text="Save", command=lambda: print("TERRIBLE")).grid(row=1, column=5, sticky=W)
 
         # button for loading cards
-        Button(buttonFrame, name="button_load_cards", text="Load", command=lambda: print("TERRIBLE")).grid(row=1, column=5, sticky=W)
+        Button(buttonFrame, name="button_load_cards", text="Load", command=lambda: print("TERRIBLE")).grid(row=1, column=6, sticky=W)
 
         self.notebook.add(cardFrame, text="Cards")
 
