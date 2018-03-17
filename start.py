@@ -4,8 +4,9 @@ from tkinter.ttk import *
 from src.Settings import Settings
 from src.CardHandler import CardHandler
 from src.ProductHandler import ProductHandler
+import src.bot.run as Runner
 
-class Bot(Frame):
+class GUI(Frame):
     def __init__(self, master):
         #Frame.__init__(self, master)
         self.master = master
@@ -49,10 +50,10 @@ class Bot(Frame):
 
 
         #### Init Browser Button
-        browserLaunchButton = Button(runFrame, text="1. Initialize").grid(row=3, column=1)
+        browserLaunchButton = Button(runFrame, text="1. Initialize", command=lambda: Runner.test()).grid(row=3, column=1)
 
         #### Start/Fire Button
-        dropDetectorButton = Button(runFrame, text="2. Run").grid(row=3, column=2)
+        dropDetectorButton = Button(runFrame, text="2. Run", command=lambda: print("LAUNCH")).grid(row=3, column=2)
 
         #### Speed Mode
         Label(runFrame, text="Mode:").grid(row=4, column=1)
@@ -291,5 +292,5 @@ class Bot(Frame):
 if __name__ == "__main__":
     root = Tk()
     root.title("Bri Bot")
-    Bot(root)
+    GUI(root)
     root.mainloop()
