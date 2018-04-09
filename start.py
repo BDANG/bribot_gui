@@ -4,16 +4,16 @@ from tkinter.ttk import *
 from src.Settings import Settings
 from src.CardHandler import CardHandler
 from src.ProductHandler import ProductHandler
-import src.bot.run as Runner
+from src.bot.Bot import Bot
 
 class GUI(Frame):
     def __init__(self, master):
-        #Frame.__init__(self, master)
         self.master = master
         self.notebook = Notebook(master)
         self.notebook.grid(column=0, row=0, sticky=(N, W, E, S))
         self._init_tabs()
-        #print(self.notebook.children)
+        self.bot = Bot()
+
 
     def _init_tabs(self):
         self._init_run_frame()
@@ -21,6 +21,7 @@ class GUI(Frame):
         self._init_cards_frame()
         self._init_upgrade_frame()
         self._init_settings_frame()
+
 
     def _init_run_frame(self):
         runFrame = Frame(self.notebook, padding=0, name="run")
@@ -49,11 +50,18 @@ class GUI(Frame):
                     offvalue="no").grid(row=2, column=3)
 
 
-        #### Init Browser Button
-        browserLaunchButton = Button(runFrame, text="1. Initialize", command=lambda: Runner.test()).grid(row=3, column=1)
+        #### Init Bot with settings, jobs, products, etc
+        browserLaunchButton = Button(runFrame,
+                                     text="1. Initialize",
+                                     command=lambda: self.bot.init(self.settings, dropDetectVar.get(),
+                                                                   productSearchVar.get(),
+                                                                   checkoutVar.get(),
+                                                                   self.notebook.children["products"].children["tree_products"],
+                                                                   self.notebook.children["cards"].children["tree_frame"]))
+        browserLaunchButton.grid(row=3, column=1)
 
         #### Start/Fire Button
-        dropDetectorButton = Button(runFrame, text="2. Run", command=lambda: print("LAUNCH")).grid(row=3, column=2)
+        dropDetectorButton = Button(runFrame, text="2. Run", command=lambda: self.bot.run()).grid(row=3, column=2)
 
         #### Speed Mode
         Label(runFrame, text="Mode:").grid(row=4, column=1)
@@ -111,7 +119,7 @@ class GUI(Frame):
 
         # wip pack the tree Frame
         # encapsulate buttons in frame, pack that shit!
-        treeFrame = Frame(cardFrame)
+        treeFrame = Frame(cardFrame, name="tree_frame")
         #treeFrame.grid(row=2, column=1, columnspan=4)
         treeFrame.pack(side="bottom", fill="x")
 
@@ -119,9 +127,10 @@ class GUI(Frame):
         # Treeview (Table) of card data
         tree = Treeview(treeFrame,
                         name="tree_address",
-                        columns=["name", "email", "phone", "address1", "apt", "address2", "zip", "city", "state", "country"],
-                        displaycolumns="#all")
-        tree.heading("#0", text="ID Number")
+                        columns=["cardID", "name", "email", "phone", "address1", "apt", "address2", "zip", "city", "state", "country"],
+                        displaycolumns=["cardID", "name", "email", "phone", "address1", "apt", "address2", "zip", "city", "state", "country"],
+                        show="headings")
+        tree.heading("cardID", text="ID Number")
         tree.heading("name", text="Name")
         tree.heading("email", text="Email")
         tree.heading("phone", text="Phone")
@@ -134,7 +143,7 @@ class GUI(Frame):
         tree.heading("country", text="Country")
 
 
-        tree.column("#0", width=80)
+        tree.column("cardID", width=50)
         tree.column("name", width=80)
         tree.column("email", width=80)
         tree.column("phone", width=80)
@@ -154,13 +163,13 @@ class GUI(Frame):
 
         tree.configure(xscrollcommand=vsb.set)
 
-
         cardTree = Treeview(treeFrame,
                             name="tree_cards",
-                            columns=["number", "month", "year", "cvv"],
-                            displaycolumns="#all")
+                            columns=["cardID", "number", "month", "year", "cvv"],
+                            displaycolumns=["cardID", "number", "month", "year", "cvv"],
+                            show="headings")
         cardTree.pack(side=BOTTOM)
-        cardTree.heading("#0", text="ID Number")
+        cardTree.heading("cardID", text="ID Number")
         cardTree.heading("number", text="Number")
         cardTree.heading("month", text="Month")
         cardTree.heading("year", text="Year")

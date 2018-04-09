@@ -14,8 +14,8 @@ class CardHandler:
     def _add_card_to_tree(self, name, email, phone, address1, addressApt, address2, zipcode, city, state, country, cardnum, cardmonth, cardyear, cvv, popup=None):
 
         cardID = self._get_next_card_num()
-        self.tree.insert("", "end", text=cardID, values=(name, email, phone, address1, addressApt, address2, zipcode, city, state, country))
-        self.cardTree.insert("", "end", text=cardID, values=(cardnum, cardmonth, cardyear, cvv))
+        self.tree.insert("", "end", values=(cardID, name, email, phone, address1, addressApt, address2, zipcode, city, state, country))
+        self.cardTree.insert("", "end", values=(cardID, cardnum, cardmonth, cardyear, cvv))
 
         if popup:
             popup.destroy()
