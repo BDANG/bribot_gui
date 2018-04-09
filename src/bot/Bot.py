@@ -59,5 +59,5 @@ class Bot:
             addressItem = addressTree.item(ID)
             cardItem = cardTree.item(ID)
             cardID = addressItem["values"][0]
-            print(addressItem["values"], cardItem["values"])
             joblist.append(Job(cardID, addressItem["values"], cardItem["values"]))
+        return joblist
