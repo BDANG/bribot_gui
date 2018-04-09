@@ -11,6 +11,9 @@ class Settings:
         self.MIN_REFRESH = MIN_REFRESH
         self.MAX_REFRESH = MAX_REFRESH
         self.CHECKOUT_DELAY = CHECKOUT_DELAY
+        self.DROP_DETECT = None
+        self.PRODUCT_SEARCH = None
+        self.AUTO_CHECKOUT = None
 
     def reset_to_default(self, filePath, minRefreshEntry, maxRefreshEntry, checkoutDelayEntry):
         # reset the Entry to the default values
