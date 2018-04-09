@@ -304,7 +304,7 @@ class ProductHandler:
         notebook = productFrame.nametowidget(productFrame.winfo_parent())
 
         # traverse down the hierarchy to card frame and then the tree
-        cardTree = notebook.children["cards"].children["tree_cards"]
+        cardTree = notebook.children["cards"].children["tree_frame"].children["tree_cards"]
 
         # iterate the cards, and retrieve their text (tied to id)
         returnList = []

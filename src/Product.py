@@ -43,6 +43,12 @@ class Product:
             self.keywordList = dictrow["keywords"].split("~")
             self.colorList = dictrow["colors"].split("~")
 
+        self.link = None
+        self.html = None
+
+    def get_key(self):
+        return self.type+"_"+self.colorTildas+"_"+self.keywordTildas
+
     def tilda_keywords(self, keywordsCommaStr):
         '''
         Converts keyword comma string ("Hanes, Boxers")
