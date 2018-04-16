@@ -1,7 +1,7 @@
 class Job:
     def __init__(self, jobID, addressTreeValues, cardTreeValues, driver=None):
         self.jobID = jobID
-        #self.productlist = productlist
+        self.productList = []
         self.address = self.parse_address_tree(addressTreeValues)
         self.card = self.parse_card_tree(cardTreeValues)
         self.driver = driver
