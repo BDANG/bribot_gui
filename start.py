@@ -90,8 +90,8 @@ class GUI(Frame):
 
 
         # insert dummy data for now
-        tree.insert('', 'end', values=("1", "Box Logo", "sweatshirts", "Medium", "Black, Red"))
-        tree.insert('', 'end', values=("1", "Hanes, Boxers", "accessories", "Small", "White"))
+        tree.insert('', 'end', values=("1", "Tees", "accessories", "medium", "checker"))
+        tree.insert('', 'end', values=("1", "Boxers", "accessories", "small", "checker"))
 
         # special class for handling the product GUI functions (adding, editing, deleting, saving, loading)
         productHandler = ProductHandler(tree)
