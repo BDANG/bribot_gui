@@ -43,6 +43,17 @@ class Bot:
         self.test()
     def run(self):
         print("RUN")
+        # init browser(s)
+
+        # assign browser(s)
+
+        # MP categories
+
+        # MP links, htmls
+
+        # MP carts
+
+        # MP checkouts
 
     def parse_products_from_treeview(self, productTree):
         '''
