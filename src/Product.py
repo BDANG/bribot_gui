@@ -50,7 +50,7 @@ class Product:
         return str(self.cardID)+" "+self.type+" "+self.size+" "+self.colorTildas+" "+self.keywordTildas+" "+str(self.link)
 
     def get_key(self):
-        return self.type+"_"+self.colorTildas+"_"+self.keywordTildas
+        return (self.type, self.colorTildas, self.keywordTildas)
 
     def tilda_keywords(self, keywordsCommaStr):
         '''
